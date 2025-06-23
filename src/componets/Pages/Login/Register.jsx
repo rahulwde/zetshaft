@@ -1,6 +1,7 @@
 import React, { use } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Context/AuthContext";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const {
@@ -12,6 +13,13 @@ const {signup}= use(AuthContext)
   const onSubmit = (data) => {
     console.log("Register Data:", data);
    signup(data.email, data.password).then(res=>{
+    Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Signup is successfully",
+  showConfirmButton: false,
+  timer: 1500
+});
     console.log(res.user).catch(error=>{
       console.log(error)
     })

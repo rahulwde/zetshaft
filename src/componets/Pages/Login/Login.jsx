@@ -1,10 +1,14 @@
 import React, { use } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Context/AuthContext";
+import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const navigate = useNavigate()
  const {register , handleSubmit, formState:{errors}} = useForm()
-const {signIn}= use(AuthContext)
+const {signIn,googleLogin}= use(AuthContext)
   const onSubmit = (data) => {
      console.log(data)
      signIn(data.email , data.password).then(res=>{
@@ -14,7 +18,21 @@ const {signIn}= use(AuthContext)
      }     )
  
     };
-
+ const handleGoogleLogin=()=>{
+  googleLogin().then(res=>{
+    Swal.fire({
+  position: "top-center",
+  icon: "success",
+  title: "Google login is successfully",
+  showConfirmButton: false,
+  timer: 1500
+});
+navigate("/")
+    console.log(res.user)
+  }).catch(error=>{
+    console.log(error)
+  })
+ }
   return (
     <div className="bg-white shadow-md rounded-xl p-8">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login to Your Account</h2>
@@ -74,7 +92,13 @@ const {signIn}= use(AuthContext)
           Login
         </button>
       </form>
-
+         <button
+      onClick={handleGoogleLogin}
+      className="flex items-center gap-3 border my-4 w-full justify-center border-gray-300 px-5 py-2 rounded-lg shadow-sm hover:shadow-md transition duration-300 bg-white"
+    >
+      <FcGoogle size={24} />
+      <span className="text-gray-700 font-medium">Continue with Google</span>
+    </button>
       {/* Optional: Register link */}
       <p className="text-sm text-center mt-6 text-gray-600">
         Don’t have an account?{" "}
